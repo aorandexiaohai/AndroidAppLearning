@@ -2,6 +2,7 @@ package com.example.geoquiz;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -16,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String KEY_INDEX="index";
     private ImageButton mNextButton;
     private ImageButton mPrevButton;
+    private Button mCheatButton;
     private TextView mQuestionTextView;
     private Question[] mQuestionBank = new Question[] {
             new Question(R.string.question_australia, true),
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         mNextButton = findViewById(R.id.next_button);
         mPrevButton = findViewById(R.id.prev_button);
         mQuestionTextView = findViewById(R.id.question_text_view);
+        mCheatButton = findViewById(R.id.cheat_button);
 
         if(savedInstanceState != null) {
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX);
@@ -75,6 +78,15 @@ public class MainActivity extends AppCompatActivity {
                 mCurrentIndex += mQuestionBank.length;
                 mCurrentIndex %= mQuestionBank.length;
                 updateQuestion();
+            }
+        });
+
+        mCheatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
+                Intent intent = CheatActivity.newIntent(MainActivity.this, answerIsTrue);
+                startActivity(intent);
             }
         });
     }
